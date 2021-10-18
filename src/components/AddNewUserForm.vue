@@ -116,14 +116,20 @@
                 <span class="caption">DATE OF BIRTH</span>
                 <span class="caption red--text">*required</span>
               </div>
+              <v-menu offset-y :close-on-content-click="false">
+                <template v-slot:activator="{ on }">
               <v-text-field
                 placeholder="dd/mm/yyyy"
                 readonly
+                v-on="on"
                 v-model="date"
                 :rules="rules.date"
                 outlined
                 class="input-text"
               ></v-text-field>
+              </template>
+                <v-date-picker v-model="date"></v-date-picker>
+              </v-menu>
             </div>
           </v-flex>
           <v-flex xs1 style="margin-top:-14px;">
@@ -132,13 +138,14 @@
                 <span class="caption">IDENTITY TYPE</span>
                 <span class="caption red--text">*required</span>
               </div>
-              <v-text-field
+              <v-select
                 placeholder="KTP/SIM/OTHER"
                 v-model="identity"
                 :rules="rules.identity"
                 outlined
+                :items='identitytypes'
                 class="input-text"
-              ></v-text-field>
+              ></v-select>
             </div>
           </v-flex>
           <v-flex xs1 style="margin-top:-15px;">
@@ -280,6 +287,7 @@ export default {
           instagram: '',
           detailAddress: '',
           image: null,
+          identitytypes: ['KTP', 'SIM', 'Others'],
           rules: {
             name: [v => !!v || 'Name is required'],
             date: [v => !!v || 'Date of birth is required'],
