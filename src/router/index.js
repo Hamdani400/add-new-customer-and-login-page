@@ -10,6 +10,10 @@ const routes = new VueRouter ({
   mode: 'history',
   routes: [
     {
+      path: '/',
+      redirect: '/login',
+    },
+    {
       path: '/login',
       name: 'loginPage',
       component: LoginPage,
