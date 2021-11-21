@@ -22,7 +22,7 @@
       <v-flex xs3>
         <v-layout column wrap>
           <v-flex xs3>
-            <img :src="image" v-if="image" alt="profile-photo" width="50px">
+            <img :src="image" v-if="image" alt="profile-photo" width="50px" />
             <div v-if="!image" class="picture-holder mb-3">
               <v-icon
                 style="margin: 30px 0px 0px 73px;"
@@ -53,7 +53,12 @@
               class="text-capitalize btn upload mb-3"
               >Upload</v-btn
             >
-            <input type="file" ref="file" @change="handleFileUpload" style="display: none;">
+            <input
+              type="file"
+              ref="file"
+              @change="handleFileUpload"
+              style="display: none;"
+            />
           </v-flex>
           <v-flex xs2 style="margin-top: -62px;">
             <v-btn
@@ -98,16 +103,10 @@
                 dense
                 row
                 style="margin-top: -1px;"
-                >
-                <v-radio
-                    label="Male"
-                    value="Male"
-                ></v-radio>
-                <v-radio
-                    label="Female"
-                    value="Female"
-                ></v-radio>
-                </v-radio-group>
+              >
+                <v-radio label="Male" value="Male"></v-radio>
+                <v-radio label="Female" value="Female"></v-radio>
+              </v-radio-group>
             </div>
           </v-flex>
           <v-flex xs1 style="margin-top:-5px;">
@@ -118,16 +117,16 @@
               </div>
               <v-menu offset-y :close-on-content-click="false">
                 <template v-slot:activator="{ on }">
-              <v-text-field
-                placeholder="dd/mm/yyyy"
-                readonly
-                v-on="on"
-                v-model="date"
-                :rules="rules.date"
-                outlined
-                class="input-text"
-              ></v-text-field>
-              </template>
+                  <v-text-field
+                    placeholder="dd/mm/yyyy"
+                    readonly
+                    v-on="on"
+                    v-model="date"
+                    :rules="rules.date"
+                    outlined
+                    class="input-text"
+                  ></v-text-field>
+                </template>
                 <v-date-picker v-model="date"></v-date-picker>
               </v-menu>
             </div>
@@ -140,10 +139,11 @@
               </div>
               <v-select
                 placeholder="KTP/SIM/OTHER"
-                v-model="identity"
+                v-model="identityType"
                 :rules="rules.identity"
+                :value="itemDetail.identityType"
                 outlined
-                :items='identitytypes'
+                :items="identitytypes"
                 class="input-text"
               ></v-select>
             </div>
@@ -190,14 +190,15 @@
                 :rules="rules.phone"
                 outlined
                 class="input-text"
-              ><v-select></v-select></v-text-field>
+                ><v-select></v-select
+              ></v-text-field>
             </div>
           </v-flex>
         </v-layout>
       </v-flex>
       <v-flex xs4 class="pt-4">
-          <v-layout column wrap>
-              <v-flex xs1 style="margin-top:-15px;">
+        <v-layout column wrap>
+          <v-flex xs1 style="margin-top:-15px;">
             <div class="d-block">
               <div class="d-flex justify-space-between mb-2">
                 <span class="caption">ADRESS</span>
@@ -213,7 +214,7 @@
               ></v-textarea>
             </div>
           </v-flex>
-              <v-flex xs1 style="margin-top:-15px;">
+          <v-flex xs1 style="margin-top:-15px;">
             <div class="d-block">
               <div class="d-flex justify-space-between mb-2">
                 <span class="caption">DETAIL ADRESS</span>
@@ -229,11 +230,15 @@
               ></v-textarea>
             </div>
           </v-flex>
-              <v-flex xs1 style="margin-top:-15px;" class="px-5">
-                  <div class="d-block">
-                  <span class="caption">Select pin from maps</span>
-            <img style="width: 100%; margin-top: -0.5px;" src="https://i.pinimg.com/originals/82/dd/4c/82dd4c094377e2bff9d9786d106c2500.png" alt="map">
-          </div>
+          <v-flex xs1 style="margin-top:-15px;" class="px-5">
+            <div class="d-block">
+              <span class="caption">Select pin from maps</span>
+              <img
+                style="width: 100%; margin-top: -0.5px;"
+                src="https://i.pinimg.com/originals/82/dd/4c/82dd4c094377e2bff9d9786d106c2500.png"
+                alt="map"
+              />
+            </div>
           </v-flex>
           <v-flex xs1 style="margin-top:-15px;">
             <div class="d-block">
@@ -247,23 +252,40 @@
                 class="input-text"
               ></v-text-field>
               <v-btn
-                  @click="addItem"
-                  class="text-capitalize mb-3"
-                  style="margin-top:-15px; margin-left: 150px"
-                  rounded
-                  dark
-                  flat
-                  elevation="0"
-                  height="35px"
-                  width="150px"
-                  small
-                  color="#f95f5f"
-                >
-                  <span class="caption white--text">Add Customer</span></v-btn
-                >
+                @click="updateItem"
+                class="text-capitalize mb-3"
+                style="margin-top:-15px; margin-left: 150px"
+                rounded
+                dark
+                flat
+                elevation="0"
+                height="35px"
+                width="150px"
+                small
+                color="#f95f5f"
+                v-if="isEditUser"
+              >
+                <span class="caption white--text">Edit Customer</span></v-btn
+              >
+              <v-btn
+                v-if="!isEditUser"
+                @click="addItem"
+                class="text-capitalize mb-3"
+                style="margin-top:-15px; margin-left: 150px"
+                rounded
+                dark
+                flat
+                elevation="0"
+                height="35px"
+                width="150px"
+                small
+                color="#f95f5f"
+              >
+                <span class="caption white--text">Add Customer</span></v-btn
+              >
             </div>
           </v-flex>
-          </v-layout>
+        </v-layout>
       </v-flex>
     </v-layout>
   </v-card>
@@ -274,59 +296,101 @@
 
 export default {
   name: 'AddNewUserForm',
-  props: ['closeForm', 'submit'],
-  data() {
-      return {
-          name: '',
-          gender: '',
-          date: '',
-          identity: '',
-          email: '',
-          phone: '',
-          address: '',
-          instagram: '',
-          detailAddress: '',
-          image: null,
-          identitytypes: ['KTP', 'SIM', 'Others'],
-          rules: {
-            name: [v => !!v || 'Name is required'],
-            date: [v => !!v || 'Date of birth is required'],
-            identity: [v => !!v || 'Identity type is required'],
-            identityNumber: [v => !!v || 'Identity number is required'],
-            emailEmpty: [v => !!v || 'Email is required'],
-            phone: [v => !!v || 'Phone number is required'],
-            address: [v => !!v || 'Address is required'],
-            detailAddress: [v => !!v || 'Detail address is required'],
-            email: value => {
-            const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-            return pattern.test(value) || 'Invalid e-mail.'
-            },
-          }
-
+  props: ['closeForm', 'submit', 'itemDetail', 'isEditUser', 'update'],
+  data () {
+    return {
+      name: '',
+      gender: '',
+      date: '',
+      identityNumber: '',
+      email: '',
+      phone: '',
+      address: '',
+      instagram: '',
+      detailAddress: '',
+      identityType: '',
+      image: null,
+      identitytypes: ['KTP', 'SIM', 'Others'],
+      rules: {
+        name: [v => !!v || 'Name is required'],
+        date: [v => !!v || 'Date of birth is required'],
+        identity: [v => !!v || 'Identity type is required'],
+        identityNumber: [v => !!v || 'Identity number is required'],
+        emailEmpty: [v => !!v || 'Email is required'],
+        phone: [v => !!v || 'Phone number is required'],
+        address: [v => !!v || 'Address is required'],
+        detailAddress: [v => !!v || 'Detail address is required'],
+        email: value => {
+          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+          return pattern.test(value) || 'Invalid e-mail.'
+        }
       }
+    }
+  },
+  mounted () {
+    this.getDetailData()
   },
   methods: {
-    addFile() {
+    getDetailData () {
+      if (this.itemDetail) {
+        this.name = this.itemDetail.name
+        this.gender = this.itemDetail.gender
+        this.image = this.itemDetail.image
+        this.date = this.itemDetail.date
+        this.identityNumber = this.itemDetail.identityNumber
+        this.email = this.itemDetail.email
+        this.phone = this.itemDetail.phone
+        this.address = this.itemDetail.address
+        this.instagram = this.itemDetail.instagram
+        this.detailAddress = this.itemDetail.detailAddress
+        this.identityType = this.itemDetail.identityType
+      }
+    },
+    addFile () {
       this.$refs.file.click()
     },
-    handleFileUpload(e) {
+    handleFileUpload (e) {
       this.image = URL.createObjectURL(e.target.files[0])
     },
-    removePhoto() {
+    removePhoto () {
       this.image = null
     },
     close () {
       this.closeForm()
     },
-    addItem() {
-        this.submit({
-            id: 99877313,
-            name: this.name,
-            gender: this.gender,
-            address: this.address,
-            phone: this.phone,
-        })
-        this.closeForm()
+    addItem () {
+      this.submit({
+        id: 99877313,
+        name: this.name,
+        gender: this.gender,
+        address: this.address,
+        phone: this.phone,
+        date: this.date,
+        identityNumber: this.identityNumber,
+        email: this.email,
+        instagram: this.instagram,
+        detailAddress: this.detailAddress,
+        image: this.image,
+        identityType: this.identityType
+      })
+      this.closeForm()
+    },
+    updateItem () {
+      this.update({
+        id: 99877313,
+        name: this.name,
+        gender: this.gender,
+        address: this.address,
+        phone: this.phone,
+        date: this.date,
+        identityNumber: this.identityNumber,
+        email: this.email,
+        instagram: this.instagram,
+        detailAddress: this.detailAddress,
+        image: this.image,
+        identityType: this.identityType
+      })
+      this.closeForm()
     }
   }
 }
@@ -339,30 +403,30 @@ export default {
   min-width: 100%;
 
   &.area {
-      .v-input__slot {
-    min-height: 0px !important;
-    height: 100px !important;
-    border-radius: 8px;
-    width: 100%;
+    .v-input__slot {
+      min-height: 0px !important;
+      height: 100px !important;
+      border-radius: 8px;
+      width: 100%;
     }
-    
+
     textarea {
-        font-size: 0.8rem;
-        margin-top: 0;
+      font-size: 0.8rem;
+      margin-top: 0;
     }
   }
 
   &.detail-area {
-      .v-input__slot {
-    min-height: 0px !important;
-    height: 80px !important;
-    border-radius: 8px;
-    width: 100%;
+    .v-input__slot {
+      min-height: 0px !important;
+      height: 80px !important;
+      border-radius: 8px;
+      width: 100%;
     }
     textarea {
-        font-size: 0.8rem;
-        margin-top: 0;
-    }    
+      font-size: 0.8rem;
+      margin-top: 0;
+    }
   }
 
   fieldset {

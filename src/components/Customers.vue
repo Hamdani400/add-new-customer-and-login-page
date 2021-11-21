@@ -21,7 +21,7 @@
           </v-flex>
         </v-layout>
         <v-layout class="px-4" row wrap>
-          <add-new-user-form :close-form="closeForm" :submit="submit" v-if="isAddingUser"></add-new-user-form>
+          <add-new-user-form :itemDetail="itemDetail" :close-form="closeForm" :isEditUser="isEditUser" :submit="submit" :update="update" v-if="isAddingUser"></add-new-user-form>
           <v-card
             width="100%"
             height="80vh"
@@ -185,12 +185,14 @@ export default {
   name: 'Dashboard',
   data () {
     return {
+      itemDetail: '',
       search: '',
       singleSelect: '',
       gender: '',
       address: '',
       editedIndex: '',
       isAddingUser: false,
+      isEditUser: false,
       addressFilter: [],
       pagination: {
         page: 1,
@@ -564,11 +566,33 @@ export default {
         }
       })
     },
+    editItem(item) {
+      this.isEditUser = true
+      this.isAddingUser = true
+      this.editedIndex = this.items.indexOf(item)
+      this.itemDetail = {
+        name: this.items[this.editedIndex].name,
+        image: this.items[this.editedIndex].image,
+        gender: this.items[this.editedIndex].gender,
+        date: this.items[this.editedIndex].date,
+        identityType: this.items[this.editedIndex].identityType,
+        identityNumber: this.items[this.editedIndex].identityNumber,
+        email: this.items[this.editedIndex].email,
+        phone: this.items[this.editedIndex].phone,
+        address: this.items[this.editedIndex].address,
+        detailAddress: this.items[this.editedIndex].detailAddress,
+        instagram: this.items[this.editedIndex].instagram, 
+      }
+    },
     closeForm () {
       this.isAddingUser = false
+      this.isEditUser = false
     },
     submit(item) {
       this.items.unshift(item)
+    },
+    update(item) {
+      this.items.splice(this.editedIndex, 1, item)
     },
     getFilterAddress() {
       this.addressFilter = this.items.map(i => i.address)
